@@ -17,11 +17,18 @@ Thread::~Thread()
 	}
 }
 
+void* Thread::threadfunc(void* self)
+{
+	Thread* t=static_cast<Thread*>(self);
+	t->func_();
+	return NULL;
+}
+
 void Thread::start()
 {
 	started_=true;
 	//if(pthread_create(&pthreadId_,NULL,*func_.target<void*(void*)>(),NULL))
-	if(pthread_create(&pthreadId_,NULL,func_,NULL))
+	if(pthread_create(&pthreadId_,NULL,&threadfunc,this))
 	{
 		started_=false;
 		std::cout<<"Failed in pthread_create"<<std::endl;

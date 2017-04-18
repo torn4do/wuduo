@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void* add(void*)
+void add()
 {
 	cout<<"enter add function"<<endl;
 }

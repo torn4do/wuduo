@@ -8,8 +8,8 @@
 
 class Thread
 {
-	//typedef std::function<void*(void*)> ThreadFunc;
-	typedef void*(*ThreadFunc)(void *);
+	typedef std::function<void()> ThreadFunc;
+	//typedef void*(*ThreadFunc)(void *);
 	public:
 		explicit Thread(const ThreadFunc);
 		~Thread();
@@ -20,6 +20,8 @@ class Thread
 		bool started() const {return started_;};
 
 	private:
+		static void* threadfunc(void*);
+
 		pthread_t pthreadId_;
 		std::shared_ptr<pid_t> tid_;//这个参数暂时没什么用
 		ThreadFunc func_;
