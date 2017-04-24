@@ -1,3 +1,6 @@
+#ifndef WUDUO_NET_POLLER_H
+#define WUDUO_NET_POLLER_H
+
 #include <vector>
 #include <map>
 
@@ -7,6 +10,8 @@ namespace wuduo
 	
 class Channel;
 class EventLoop;
+
+class Poller
 {
 	public:
 		typedef std::vector<Channel*> ChannelVec;
@@ -26,3 +31,5 @@ class EventLoop;
 		ChannelMap channels_;
 };
 }
+
+#endif

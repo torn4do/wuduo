@@ -4,10 +4,20 @@
 #include <pthread.h>
 #include <functional>
 #include <memory>
+#include <unistd.h> 
+#include <sys/syscall.h>
 #include "Noncopyable.h"
 
 namespace wuduo
 {
+
+namespace CurrentThread
+{
+	pid_t tid()
+	{
+		return static_cast<pid_t>(::syscall(SYS_gettid));
+	}
+}
 
 class Thread
 {

@@ -1,18 +1,20 @@
 #include "Poller.h"
 #include <iostream>
+#include <assert.h>
 #include "EventLoop.h"
+#include "Channel.h"
 
 using namespace wuduo;
 
 EventLoop::EventLoop()
 	:looping_(false),
 	stop_(false),
-	tid_(CurrentThread::tid_()),
-	poller_(new Poller)
+	tid_(CurrentThread::tid()),
+	poller_(new Poller(this))
 {
 }
 
-~EventLoop::EventLoop()
+EventLoop::~EventLoop()
 {
 }
 

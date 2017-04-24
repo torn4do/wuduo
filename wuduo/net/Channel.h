@@ -1,3 +1,6 @@
+#ifndef WUDUO_NET_EVENTLOOP_H
+#define WUDUO_NET_EVENTLOOP_H
+
 #include "../base/Noncopyable.h"
 #include <functional>
 namespace wuduo
@@ -7,7 +10,7 @@ class EventLoop;
 class Channel:public Noncopyable
 {
 	public:
-	typedef function<void()> CallBackFunc;
+	typedef std::function<void()> CallBackFunc;
 
 	explicit Channel(EventLoop* loop,int fd);
 	
@@ -17,20 +20,20 @@ class Channel:public Noncopyable
 	void setWriteCallBack(const CallBackFunc& cb){writeCallBack_=cb;};
 	void setErroeCallBack(const CallBackFunc& cb){errorCallBack_=cb;};
 	
-	void enableReadEvent(){events_|=bitsReadEvent;update();}
-	void enableWriteEvent(){events_|=bitsWriteEvent;update();}
-	void disableReadEvent(){events_&=~bitsReadEvent;update();}
-	void disableWriteEvent(){events_&=~bitsWriteEvent;update();}
+	void enableReadEvent(){events_|=bitsReadEvent;update();};
+	void enableWriteEvent(){events_|=bitsWriteEvent;update();};
+	void disableReadEvent(){events_&=~bitsReadEvent;update();};
+	void disableWriteEvent(){events_&=~bitsWriteEvent;update();};
 	
 
-	int fd(){return fd_;}
-	int events(){return events_;}
-	int setRevents(int revents){revents_=revents;}
+	int fd(){return fd_;};
+	int events(){return events_;};
+	int setRevents(int revents){revents_=revents;};
 	
-	EventLoop* loop(){return loop_;}
-	int index(){return index_;}
-	void setIndex(int index){index_=index;}
-	boll isNoneEvent(return events_==bitsNoneEvent;)
+	EventLoop* loop(){return loop_;};
+	int index(){return index_;};
+	void setIndex(int index){index_=index;};
+	bool isNoneEvent(){return events_==bitsNoneEvent;};
 
 	private:
 		void update();
@@ -49,6 +52,8 @@ class Channel:public Noncopyable
 		CallBackFunc readCallBack_;
 		CallBackFunc writeCallBack_;
 		CallBackFunc errorCallBack_;
-}
+};
 
 }
+
+#endif

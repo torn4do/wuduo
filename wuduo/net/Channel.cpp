@@ -1,4 +1,5 @@
 #include "Channel.h"
+#include "EventLoop.h"
 #include <poll.h>
 #include <iostream>
 
@@ -10,7 +11,7 @@ const int Channel::bitsWriteEvent=POLLOUT;
 
 Channel::Channel(EventLoop* loop,int fd)
 	:loop_(loop),
-	index(-1),
+	index_(-1),
 	fd_(fd),
 	events_(0),
 	revents_(0)

@@ -1,4 +1,5 @@
 #include "Poller.h"
+#include "Channel.h"
 #include <poll.h>
 #include <iostream>
 
@@ -16,7 +17,7 @@ Poller::~Poller()
 void Poller::poll(ChannelVec& activeChannels,int timeout)
 {
 	int eventNum;
-	eventNum=poll(&(*pollfds_.begin()),pollfds_.size(),timeout);
+	eventNum=::poll((pollfd*)&(*pollfds_.begin()),pollfds_.size(),timeout);
 	if(eventNum>0)
 	{
 		fillActiveChannels(activeChannels,eventNum);
@@ -27,7 +28,7 @@ void Poller::poll(ChannelVec& activeChannels,int timeout)
 	}
 	else
 	{
-		std::cerr<<“poll error”<<std::endl;
+		std::cerr<<"poll error"<<std::endl;
 	}
 }
 
@@ -41,12 +42,12 @@ void Poller::updateChannel(Channel* channel)
 		pfd.fd=channel->fd();
 		pfd.events=channel->events();
 		pfd.revents=0;
-		pollfds_.push_pack(pfd);
+		pollfds_.push_back(pfd);
 		//更新channel
 		int index =pollfds_.size()-1;
 		channel->setIndex(index);
 		//更新channels_
-		channels_[pdf.fd]=channel;
+		channels_[pfd.fd]=channel;
 	}
 	else
 	{
@@ -54,27 +55,28 @@ void Poller::updateChannel(Channel* channel)
 		//更新pollfds_中的pollfd
 		struct pollfd& pfd=pollfds_[channel->index()];
 		pfd.events=channel->events();
-		pfd.reevets=0;
+		pfd.revents=0;
 		//为什么？
 		if(channel->isNoneEvent())
 		{
-			pfd.fd=-1；
+			pfd.fd=-1;
 		}
 	}
 
 
 }
 
-void Poller::fillActiveChannels(ChannelVec& Channels,int eventNum)
+void Poller::fillActiveChannels(ChannelVec& channels,int eventNum)
 {
+	//遍历pollfds_ 取出对应的fd和对应的Channel，修改channel后将结果放入Channels中
 	for(auto iter=pollfds_.begin();iter!=pollfds_.end()&&eventNum>0;++iter )
 	{
-		if(iter->revent>0)
+		if(iter->revents>0)
 		{
 			eventNum--;
-
-
-
+			Channel& chl=*channels_[iter->fd];
+			chl.setRevents(iter->revents);
+			channels.push_back(&chl);
 		}
 
 	}

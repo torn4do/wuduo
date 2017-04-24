@@ -8,33 +8,7 @@
 */
 
 #include "Thread.h"
-#include <unistd.h> 
-#include <sys/syscall.h>
 #include <iostream>
-
-namespace wuduo
-{
-	namespace CurrentThread
-	{
-		pid_t tid()
-		{
-			return static_cast<pid_t>(::syscall(SYS_gettid));
-		}
-	}
-
-	/*namespace detail
-	{
-		struct ThreadId
-		{
-			weak_ptr<pid_t> wkTid_;
-			ThreadId(const shared_ptr<pid_t> shTid):
-			wkTid_(shTid)
-			{}
-			
-		}
-	}
-	*/
-}
 
 using namespace wuduo;
 
